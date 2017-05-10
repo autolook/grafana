@@ -143,9 +143,9 @@ func SearchDashboards(query *search.FindPersistedDashboardsQuery) error {
 
 	if query.IsStarred {
 		sql.WriteString(" INNER JOIN star on star.dashboard_id = dashboard.id")
-	}
-
-	sql.WriteString(` WHERE dashboard.org_id=?`)
+	}else {
+    sql.WriteString(` WHERE dashboard.org_id=?`)
+ }
 
 	params = append(params, query.OrgId)
 
