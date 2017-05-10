@@ -164,9 +164,9 @@ func (a *ldapAuther) syncInfoAndOrgRoles(user *m.User, ldapUser *LdapUserInfo) e
 		return err
 	}
 	// sync org roles
-	if err := a.SyncOrgRoles(user, ldapUser); err != nil {
-		return err
-	}
+	//if err := a.SyncOrgRoles(user, ldapUser); err != nil {
+	//	return err
+	//}
 
 	return nil
 }
