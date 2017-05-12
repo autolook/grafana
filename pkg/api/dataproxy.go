@@ -68,7 +68,8 @@ func NewReverseProxy(ds *m.DataSource, proxyPath string, targetUrl *url.URL) *ht
 }
 
 func getDatasource(id int64, orgId int64) (*m.DataSource, error) {
-	query := m.GetDataSourceByIdQuery{Id: id, OrgId: orgId}
+	//query := m.GetDataSourceByIdQuery{Id: id, OrgId: orgId}
+  query := m.GetDataSourceByIdQuery{Id: id}
 	if err := bus.Dispatch(&query); err != nil {
 		return nil, err
 	}
