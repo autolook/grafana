@@ -110,5 +110,108 @@
 		<!-- End Google Tag Manager -->
 	[[end]]
 
+    <!--临时-->
+    <script>
+      (function(){
+        function getCookie(name){
+          var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+          if(arr=document.cookie.match(reg))
+            return unescape(arr[2]);
+          else
+            return null;
+        }
+        function init(data){
+          if(data.length==0) return
+          var html="";
+          var display_a=!Number(localStorage.hide_temp_extra)?'none':'block'
+          var display_ul=!Number(localStorage.hide_temp_extra)?'block':'none'
+          html+="<a id='temp-extra' style='" +
+            "line-height: 24px;" +
+            "display:"+display_a+";" +
+            "position: fixed;" +
+            "right: 0;" +
+            "bottom: 0;" +
+            "z-index: 9999;" +
+            "list-style: none;" +
+            "padding: 0 5px;" +
+            "opacity: .8;" +
+            "color: #D8D9DA;" +
+            "background: #1f1d1d;" +
+            "' href='#'>关注</a>"
+          html+="<ul id='temp-extra-ul' style='" +
+            "position: fixed;" +
+            "display:"+display_ul+";" +
+            "right: 0;bottom: 0;" +
+            "z-index: 9999;" +
+            "list-style: none;" +
+            "opacity: .8;" +
+            "box-shadow: 0 0 35px 0 #141414;" +
+            "padding: 10px;" +
+            "background: #1f1d1d;" +
+            "border: 1px solid #292929;"+
+            "'>"
+          for(var i=0;i<data.length;i++){
+            html+="<li><a class='temp-extra-link' style='" +
+              "line-height: 24px;" +
+              "display: block;" +
+              "padding: 3px 10px;" +
+              "white-space: nowrap;" +
+              "background-color: #292929;" +
+              "margin-bottom: 4px;"+
+              "color: #D8D9DA;'" +
+              " href='/dashboard/"+data[i].uri+"' data-id='"+data[i].id+"'>"+data[i].title+"</a></li>"
+          }
+          html+="<li><a class='close-temp-extra' style='" +
+            "line-height: 24px;" +
+            "display: block;" +
+            "padding: 3px 10px;" +
+            "white-space: nowrap;" +
+            "background-color: #292929;" +
+            "margin-bottom: 4px;"+
+            "color: #D8D9DA;'" +
+            " href='#'>关闭</a></li>"
+          html+="</ul>"
+          $("body").append(html)
+
+        };
+        $("body").on("click","#temp-extra",function(e){
+          e.preventDefault()
+          $("#temp-extra").hide();
+          $("#temp-extra-ul").show();
+          localStorage.hide_temp_extra=0
+        })
+        $("body").on("click","#temp-extra-ul a.close-temp-extra",function(e){
+          e.preventDefault()
+          $("#temp-extra").show();
+          $("#temp-extra-ul").hide();
+          localStorage.hide_temp_extra=1
+        })
+        $("body").on("click","#temp-extra-ul li a.temp-extra-link",function(e){
+          e.preventDefault()
+          var $this=$(this)
+          var href=$this.attr("href");
+          var id=$this.attr("data-id");
+          var user=getCookie("grafana_user");
+          $.ajax({
+            data:{},
+            url:"/api/grafana/resetOrg?user="+user+"&id="+id,
+            success:function(data){
+              console.log(href)
+              location.href=href
+            },error:function(data){
+              console.log(data)
+            }
+          })
+        })
+        $.ajax({
+          data:{},
+          url:"/api/grafana/searchStarred?user="+getCookie("grafana_user"),
+          success:function(data){
+            init(data)
+          }
+        })
+
+      })();
+    </script>
 	</body>
 </html>
